@@ -3,8 +3,10 @@
 #include<cassert>
 #include<cstdlib>
 #include<ctime>
-#include<algorithm>
 #include<windows.h>
+#include<map>
+#include<tuple>
+#include<algorithm>
 #include<random>
 #include<functional>
 using namespace std;
@@ -61,17 +63,83 @@ namespace DataMaker
 		rand_shuffle(edge.begin(),edge.end());
 		return edge;
 	}
+	vector<tuple<int,int,int> >rand_value_tree(int n,int c)
+	{
+		vector<pair<int,int> >edge=rand_tree(n);
+		vector<tuple<int,int,int> >G;
+		for(auto [u,v]:edge)
+			G.emplace_back(u,v,rand(1,c));
+		rand_shuffle(G.begin(),G.end());
+		return G;
+	}
+	vector<pair<int,int> >rand_circle_tree(int n)
+	{
+		vector<pair<int,int> >edge=rand_tree(n);
+		map<pair<int,int>,bool>book;
+		for(auto [u,v]:edge)
+			book[{u,v}]=book[{v,u}]=true;
+		int u=rand(1,n),v=rand(1,n);
+		while(u==v||book[{u,v}]) u=rand(1,n),v=rand(1,n);
+		edge.emplace_back(u,v);
+		book[{u,v}]=book[{v,u}]=true;
+		return edge;
+	}
+	vector<tuple<int,int,int> >rand_value_circle_tree(int n,int c)
+	{
+		vector<pair<int,int> >edge=rand_circle_tree(n);
+		vector<tuple<int,int,int> >G;
+		for(auto [u,v]:edge)
+			G.emplace_back(u,v,rand(1,c));
+		rand_shuffle(G.begin(),G.end());
+		return G;
+	}
 	vector<pair<int,int> >rand_graph(int n,int m)
 	{
-		assert(m>=n-1);
-		vector<pair<int,int> >edge=rand_tree(n);
-		for(int i=1;i<=m-(n-1);i++)
+		vector<pair<int,int> >edge;
+		map<pair<int,int>,bool>book;
+		for(int i=1;i<=m;i++)
 		{
 			int u=rand(1,n),v=rand(1,n);
-			while(u==v) u=rand(1,n),v=rand(1,n);
+			while(u==v||book[{u,v}]) u=rand(1,n),v=rand(1,n);
 			edge.emplace_back(u,v);
+			book[{u,v}]=true;
 		}
 		rand_shuffle(edge.begin(),edge.end());
 		return edge;
+	}
+	vector<tuple<int,int,int> >rand_value_graph(int n,int m,int c)
+	{
+		vector<pair<int,int> >edge=rand_graph(n,m);
+		vector<tuple<int,int,int> >G;
+		for(auto [u,v]:edge)
+			G.emplace_back(u,v,rand(1,c));
+		rand_shuffle(G.begin(),G.end());
+		return G;
+	}
+	vector<pair<int,int> >rand_connected_graph(int n,int m)
+	{
+		assert(m>=n-1);
+		vector<pair<int,int> >edge=rand_tree(n);
+		map<pair<int,int>,bool>book;
+		for(auto [u,v]:edge)
+			book[{u,v}]=book[{v,u}]=true;
+		for(int i=1;i<=m-(n-1);i++)
+		{
+			int u=rand(1,n),v=rand(1,n);
+			while(u==v||book[{u,v}]) u=rand(1,n),v=rand(1,n);
+			edge.emplace_back(u,v);
+			book[{u,v}]=book[{v,u}]=true;
+		}
+		rand_shuffle(edge.begin(),edge.end());
+		return edge;
+	}
+	vector<tuple<int,int,int> >rand_connected_value_graph(int n,int m,int c)
+	{
+		vector<pair<int,int> >edge=rand_connected_graph(n,m);
+		vector<tuple<int,int,int> >G;
+		for(auto [u,v]:edge)
+			G.emplace_back(u,v,rand(1,c));
+		rand_shuffle(G.begin(),G.end());
+		return G;
 	}
 }
