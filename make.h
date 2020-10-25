@@ -29,6 +29,11 @@ namespace DataMaker
 	{
 		return brand()%(r-l+1)+l;
 	}
+	pair<int,int> rand_interval(int a,int b)
+	{
+		int l=rand(a,b),r=rand(l,b);
+		return make_pair(l,r);
+	}
 	template<typename T>
 	void rand_shuffle(T _begin,T _end)
 	{
