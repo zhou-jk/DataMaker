@@ -80,7 +80,8 @@ namespace DataMaker
 		rand_shuffle(p.begin(),p.end());
 		vector<pair<int,int> >edge;
 		for(int i=1;i<n;i++)
-			edge.emplace_back(p[i-1],p[i]);
+			if(rand(0,1)) edge.emplace_back(p[i-1],p[i]);
+			else edge.emplace_back(p[i],p[i-1]);
 		rand_shuffle(edge.begin(),edge.end());
 		return edge;
 	}
