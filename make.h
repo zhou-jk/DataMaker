@@ -72,6 +72,53 @@ namespace DataMaker
 		rand_shuffle(G.begin(),G.end());
 		return G;
 	}
+	vector<pair<int,int> >rand_chain_tree(int n)
+	{
+		vector<int>p(n);
+		for(int i=0;i<n;i++)
+			p[i]=i+1;
+		rand_shuffle(p.begin(),p.end());
+		vector<pair<int,int> >edge;
+		for(int i=1;i<n;i++)
+			edge.emplace_back(p[i-1],p[i]);
+		rand_shuffle(edge.begin(),edge.end());
+		return edge;
+	}
+	vector<tuple<int,int,int> >rand_value_chain_tree(int n,int c)
+	{
+		vector<pair<int,int> >edge=rand_chain_tree(n);
+		vector<tuple<int,int,int> >G;
+		for(auto [u,v]:edge)
+			G.emplace_back(u,v,rand(1,c));
+		rand_shuffle(G.begin(),G.end());
+		return G;
+	}
+	vector<pair<int,int> >rand_chrysanthemum_tree(int n)
+	{
+		vector<int>p(n);
+		for(int i=0;i<n;i++)
+			p[i]=i+1;
+		rand_shuffle(p.begin(),p.end());
+		int u=rand(1,n);
+		vector<pair<int,int> >edge;
+		for(int v:p)
+			if(v!=u)
+			{
+				if(rand(0,1)) edge.emplace_back(u,v);
+				else edge.emplace_back(v,u);
+			}
+		rand_shuffle(edge.begin(),edge.end());
+		return edge;
+	}
+	vector<tuple<int,int,int> >rand_value_chrysanthemum_tree(int n,int c)
+	{
+		vector<pair<int,int> >edge=rand_chrysanthemum_tree(n);
+		vector<tuple<int,int,int> >G;
+		for(auto [u,v]:edge)
+			G.emplace_back(u,v,rand(1,c));
+		rand_shuffle(G.begin(),G.end());
+		return G;
+	}
 	vector<pair<int,int> >rand_circle_tree(int n)
 	{
 		vector<pair<int,int> >edge=rand_tree(n);
@@ -82,6 +129,7 @@ namespace DataMaker
 		while(u==v||book[{u,v}]) u=rand(1,n),v=rand(1,n);
 		edge.emplace_back(u,v);
 		book[{u,v}]=book[{v,u}]=true;
+		rand_shuffle(edge.begin(),edge.end());
 		return edge;
 	}
 	vector<tuple<int,int,int> >rand_value_circle_tree(int n,int c)
