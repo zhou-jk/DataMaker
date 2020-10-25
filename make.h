@@ -34,6 +34,15 @@ namespace DataMaker
 		int l=rand(a,b),r=rand(l,b);
 		return make_pair(l,r);
 	}
+	string rand_01_string(int n)
+	{
+		string s;
+		s.resize(n);
+		for(int i=0;i<n;i++)
+			if(rand(0,1)) s[i]='1';
+			else s[i]='0';
+		return s;
+	}
 	template<typename T>
 	void rand_shuffle(T _begin,T _end)
 	{
