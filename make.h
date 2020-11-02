@@ -29,20 +29,6 @@ namespace DataMaker
 	{
 		return brand()%(r-l+1)+l;
 	}
-	pair<int,int> rand_interval(int a,int b)
-	{
-		int l=rand(a,b),r=rand(l,b);
-		return make_pair(l,r);
-	}
-	string rand_01_string(int n)
-	{
-		string s;
-		s.resize(n);
-		for(int i=0;i<n;i++)
-			if(rand(0,1)) s[i]='1';
-			else s[i]='0';
-		return s;
-	}
 	template<typename T>
 	void rand_shuffle(T _begin,T _end)
 	{
@@ -72,6 +58,7 @@ namespace DataMaker
 		{
 			int u=rand(1,n),v=rand(1,n);
 			while(getf(u)==getf(v)) u=rand(1,n),v=rand(1,n);
+			merge(u,v);
 			edge.emplace_back(u,v);
 		}
 		rand_shuffle(edge.begin(),edge.end());
@@ -94,8 +81,7 @@ namespace DataMaker
 		rand_shuffle(p.begin(),p.end());
 		vector<pair<int,int> >edge;
 		for(int i=1;i<n;i++)
-			if(rand(0,1)) edge.emplace_back(p[i-1],p[i]);
-			else edge.emplace_back(p[i],p[i-1]);
+			edge.emplace_back(p[i-1],p[i]);
 		rand_shuffle(edge.begin(),edge.end());
 		return edge;
 	}
